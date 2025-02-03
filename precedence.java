@@ -34,7 +34,7 @@ public class precedence {
 			m.put('/', 2);
 			m.put('*', 2);
 			m.put('^', 3);
-			m.put('(', 4);
+			m.put('(', 0);
 			
 			if(m.get(a) < m.get(b)) {return 1;}
 			else {return -1;}
@@ -44,25 +44,42 @@ public class precedence {
 		public char[] push(char b) {
 			char a = '0';
 			char[] xyz = {'0', '0','0', '0','0', '0','0', '0','0', '0'};
-			if(top == -1) {
+			
+			if(b == '('){
 				opstack[++top] = b;
 			}
-			else {
-				int x = 0,i = 0;
-				
-				for(i = 0; x!=1; i++) {
+			else if(b == ')') {
+				a  = pop();
+				int x = 0;
+				while(a!='(') {
+					xyz[x] = a;
 					a = pop();
-					x = pre(a, b);
-					if(x == 1) {break;}
-					xyz[i] = a;
-					if(top == -1) {opstack[++top] = b;return xyz;}
-					
-//					else {opstack[++top] = b;return a;}
+					x++;
 				}
 				
-				opstack[++top] = a;opstack[++top] = b;
-				
 			}
+			else {
+				if(top == -1) {
+					opstack[++top] = b;
+				}
+				else {
+					int x = 0,i = 0;
+				
+					for(i = 0; x!=1; i++) {
+						a = pop();
+						x = pre(a, b);
+						if(x == 1) {break;}
+						xyz[i] = a;
+						if(top == -1) {opstack[++top] = b;return xyz;}
+					
+//					else {opstack[++top] = b;return a;}
+					}
+				
+					opstack[++top] = a;opstack[++top] = b;
+				
+				}
+			}
+			
 			return xyz;
 		}
 		
@@ -101,6 +118,18 @@ public class precedence {
 		c.display();
 		System.out.println("xyz" + Arrays.toString(xyz));
 		xyz = c.push('-');
+		c.display();
+		System.out.println("xyz" + Arrays.toString(xyz));
+		xyz = c.push('(');
+		c.display();
+		System.out.println("xyz" + Arrays.toString(xyz));
+		xyz = c.push('-');
+		c.display();
+		System.out.println("xyz" + Arrays.toString(xyz));
+		xyz = c.push('*');
+		c.display();
+		System.out.println("xyz" + Arrays.toString(xyz));
+		xyz = c.push(')');
 		c.display();
 		System.out.println("xyz" + Arrays.toString(xyz));
 //		char a = '0';
